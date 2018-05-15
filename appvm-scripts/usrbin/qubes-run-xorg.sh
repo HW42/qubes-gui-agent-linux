@@ -40,6 +40,8 @@ VREFR_END=$((VREFR_START+1))
 # one FHD monitor, or multiple smaller.
 MEM=$(($MEM + 1920 * 1080 * 4 / 1024))
 
+GUI_DOMID="$(qubesdb-read /qubes-gui-domain-xid || echo 0)"
+
 sed -e  s/%MEM%/$MEM/ \
         -e  s/%DEPTH%/$DEPTH/ \
         -e  s/%MODELINE%/"$MODELINE"/ \
@@ -47,7 +49,8 @@ sed -e  s/%MEM%/$MEM/ \
         -e  s/%HSYNC_END%/"$HSYNC_END"/ \
         -e  s/%VREFR_START%/"$VREFR_START"/ \
         -e  s/%VREFR_END%/"$VREFR_END"/ \
-        -e  s/%RES%/QB$RES/ < /etc/X11/xorg-qubes.conf.template \
+        -e  s/%RES%/QB$RES/ \
+        -e  s/%GUI_DOMID%/"$GUI_DOMID"/ < /etc/X11/xorg-qubes.conf.template \
         > /etc/X11/xorg-qubes.conf
 
 XSESSION="/etc/X11/xinit/xinitrc"
